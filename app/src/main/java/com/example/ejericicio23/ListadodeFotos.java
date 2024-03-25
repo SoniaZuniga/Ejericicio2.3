@@ -2,14 +2,20 @@ package com.example.ejericicio23;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.ejericicio23.Model.Fotografias;
 import com.example.ejericicio23.config.DB;
 import com.example.ejericicio23.config.SQLiteConexion;
+import android.database.sqlite.SQLiteDatabase;
+import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListadodeFotos extends AppCompatActivity {
@@ -35,8 +41,8 @@ public class ListadodeFotos extends AppCompatActivity {
         nuevo_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent ventana_main = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(ventana_main);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -48,11 +54,6 @@ public class ListadodeFotos extends AppCompatActivity {
         });
 
         listFotos.setOnItemClickListener((parent, view, position, id) -> {
-            // Guardar la posición del elemento seleccionado
-            id_foto_selected = position;
-            Intent ver_foto = new Intent(ListaFotosActivity.this,VerImagen.class);
-            ver_foto.putExtra("ID_FOTO", id_foto_selected);
-            startActivity(ver_foto);
         });
     }
     private void ObtenerFotos() {
@@ -60,7 +61,7 @@ public class ListadodeFotos extends AppCompatActivity {
         Fotografias foto;
         fotos_list = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(Backend.SelectAllFotos, null);
+        Cursor cursor = db.rawQuery(DB.SelectAllFotos, null);
 
         while (cursor.moveToNext()) {
             foto = new Fotografias();
